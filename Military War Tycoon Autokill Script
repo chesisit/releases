@@ -53,6 +53,7 @@ UIS.InputBegan:Connect(function(Input, gameProcessed)
         if KillEnabled then
             KillEnabled = false
             game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Kill Farming Status", Text = "Disabled"})
+            Character.HumanoidRootPart.Anchored = false
         else
             KillEnabled = true
             game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Kill Farming Status", Text = "Enabled"})
