@@ -49,7 +49,7 @@ local function StartFarming()
 end
 
 UIS.InputBegan:Connect(function(Input, gameProcessed)
-    if Input.KeyCode == Enum.KeyCode.X and not gameProcessed then
+    if Input.KeyCode == Enum.KeyCode.X then
         if KillEnabled then
             KillEnabled = false
             game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Kill Farming Status", Text = "Disabled"})
