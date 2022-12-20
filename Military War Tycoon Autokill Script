@@ -1,0 +1,64 @@
+--[[
+
+    Military War Tycoon Script made by ches#8887
+    roblox.com/games/31490825/ANIMATIONS-Military-War-Tycoon
+    
+    To toggle the script press X
+
+]]
+
+local KillEnabled = false
+
+local UIS = game:GetService("UserInputService")
+
+local Player = game:GetService("Players").LocalPlayer
+local Character = Player.Character
+
+local function StartFarming()
+    task.spawn(function()
+        repeat game:GetService("RunService").Heartbeat:Wait()
+            local PlayerFound = false
+            
+            for _,v in pairs(game:GetService("Players"):GetPlayers()) do
+                if v ~= Player and Player.Character then
+                    if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                        if not v.Character:FindFirstChildOfClass("ForceField") then
+                            local RootPart = v.Character:FindFirstChild("HumanoidRootPart")
+                            
+                            PlayerFound = true
+                            
+                            v.Character:FindFirstChildOfClass("Humanoid").Sit = false
+                            
+                            RootPart.CFrame = Character.HumanoidRootPart.CFrame * CFrame.new(0,2,-1)
+                            RootPart.Anchored = true
+                            
+                            Character.Humanoid.Sit = false
+                            Character.HumanoidRootPart.Anchored = true
+                        end    
+                    end    
+                end    
+            end
+            
+        if not PlayerFound then
+            Character.HumanoidRootPart.Anchored = false    
+        end
+        
+        until not KillEnabled
+        Character.HumanoidRootPart.Anchored = false
+    end)    
+end
+
+UIS.InputBegan:Connect(function(Input, gameProcessed)
+    if Input.KeyCode == Enum.KeyCode.X and not gameProcessed then
+        if KillEnabled then
+            KillEnabled = false
+            game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Kill Farming Status", Text = "Disabled"})
+        else
+            KillEnabled = true
+            game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Kill Farming Status", Text = "Enabled"})
+            StartFarming()
+        end    
+    end    
+end)    
+
+game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Kill Farming Script", Text = "Made by ches#8887 Press X to toggle"})
