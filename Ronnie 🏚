@@ -1,0 +1,337 @@
+-- hello. script by ches#8887
+
+-- you need a boombox to use the script
+
+-- modify it if u want to work in other games, it's not hard
+-- the code is bad because i was just making it functional
+
+-- DO NOT JUMP BEFORE DYING BECAUSE MY RAGDOLL IS BAD AND YOU WILL FLOAT UP
+
+-- be r6
+-- be in just grass
+
+local IntroTextEnabled = true -- disable if u just want to die and not chat (mainly for testing)
+
+local Player = game:GetService("Players").LocalPlayer
+local Character = Player.Character
+
+Character.Animate.toolnone:Destroy()
+
+function Chat(Chat)
+    for _,v in pairs(game.Players.LocalPlayer.PlayerGui.Chat:GetDescendants()) do
+        if v.Name == "ChatBar" then
+            v:CaptureFocus()
+            v.Text = Chat
+            v:ReleaseFocus(true)
+        end
+    end
+end
+
+function CreateBallSocket(Att0Parent, Att0Pos, Att1Parent, Att1Pos)
+    local fakepart = Instance.new("Part")
+    fakepart.Size = Att0Parent.Size
+    fakepart.CFrame = Att0Parent.CFrame
+    fakepart.CanCollide = true
+    fakepart.Massless = true
+    fakepart.Parent = Character
+    fakepart.Transparency = 1
+    fakepart.Name = Att0Parent.Name.." FAKE"
+    
+    local att0 = Instance.new("Attachment")
+    att0.Parent = fakepart
+    att0.Position = Att0Pos
+    
+    local att1 = Instance.new("Attachment")
+    att1.Parent = Att1Parent
+    att1.Position = Att1Pos
+    
+    local bsc = Instance.new("BallSocketConstraint")
+    bsc.Parent = Att1Parent
+    bsc.Attachment0 = att0
+    bsc.Attachment1 = att1
+    
+    bsc.LimitsEnabled = true
+    
+    return fakepart
+end    
+
+function CreateExplosionPart()
+    local Part = Instance.new("Part")
+    Part.Parent = Character
+    Part.Size = Vector3.new(.1,.1,.1)
+    Part.Transparency = 1
+    Part.CFrame = Character.Head.CFrame * CFrame.new(0,1,0)
+    Part.Velocity = Vector3.new(math.random(-40,40),math.random(25,55),math.random(-40,40))
+    Part.RotVelocity = Vector3.new(math.random(-25,25),math.random(15,40),math.random(-25,25))
+    Part.CanCollide = false
+    task.spawn(function()
+        task.wait(.3)
+        Part.CanCollide = true
+        task.spawn(function()
+            for i = 1,600 do
+               Part.Orientation = Vector3.new(180,0,0)
+               task.wait() 
+            end    
+        end)    
+    end)
+    return Part
+end
+
+function Netless(Part0)
+    game:GetService("RunService").Heartbeat:Connect(function() --im lazy no error handling
+        Part0.Velocity = Vector3.new(0,26,0)
+    end)    
+end    
+
+local penis =  0
+function CFAtt(Part0,Part1,offset)
+    local loop = game:GetService("RunService").Heartbeat:Connect(function() --im lazy no error handling
+        penis += 0.005
+        Part0.CFrame = Part1.CFrame * CFrame.new(0.025*math.cos(penis),0,0.025*math.sin(penis)) * offset
+    end)
+    return loop
+end
+
+game.Players:Chat("-gh 11117086918,11117086918,11117086918,11117086918,11117086918,11117086918,11117086918,11117086918,11117086918,11117086918,11117086918")
+task.wait(2)
+
+local bloodstorage = {}
+
+task.spawn(function()
+    for _,v in pairs(Character:GetChildren()) do
+        if v.Name == "BloodSplashAccessory" then
+            
+            v.Handle.AccessoryWeld:Destroy()
+            
+            local temppart = Instance.new("Part")
+            temppart.Transparency = 1
+            temppart.Parent = Character
+            temppart.CanCollide = false
+            temppart.Name = "tempbloodstoragepart"
+            
+            local temppartweld = Instance.new("Weld",temppart)
+            temppartweld.Name = "AccessoryWeld"
+            temppartweld.Part0 = temppart
+            temppartweld.Part1 = Character.Torso
+            temppartweld.C0 = CFrame.new(0,15,0)
+            
+            Netless(v.Handle)
+            
+            table.insert(bloodstorage,CFAtt(v.Handle, temppart, CFrame.new(0,0,0)))
+
+        end
+    end    
+end)
+
+task.wait(2)
+game.Players:Chat("-gh 7035528709,7960909507,4735347390,8729087766")
+task.wait()
+
+local boombox = Player.Backpack.BoomBox
+boombox.Parent = Character
+
+task.wait(.1)
+
+boombox.Handle:BreakJoints()
+
+task.spawn(function()
+    boombox.RemoteEvent:FireServer(9089977337)
+    task.wait(0.035)
+    boombox.RemoteEvent:FireServer(0)
+end)
+
+local bbpart = Instance.new("Part")
+bbpart.Transparency = 0
+bbpart.Parent = Character
+bbpart.CanCollide = false
+bbpart.Name = "bbpart"
+bbpart.Anchored = true
+bbpart.Position = Vector3.new(0,-10,0)
+
+--Netless(boombox.Handle)
+--CFAtt(boombox.Handle, bbpart, CFrame.new(0,0,0))
+
+task.spawn(function()
+    Instance.new("BodyPosition",boombox.Handle)
+    
+    game:GetService("RunService").Heartbeat:Connect(function() --im lazy no error handling
+        boombox.Handle.Velocity = Vector3.new(70,70,70)
+    end)
+    
+    local penis2 = 0
+    game:GetService("RunService").Heartbeat:Connect(function() --im lazy no error handling
+        penis2 += .2
+        boombox.Handle.CFrame = bbpart.CFrame * CFrame.new(1*math.sin(penis2),0,math.cos(penis2))
+    end)
+end)
+
+if IntroTextEnabled then
+    Chat("I dont know how you people are even trying to call me")
+    task.wait(5)
+    Chat("Yeah you wanna talk to me now?")
+    task.wait(3.5)
+    Chat("Mhmm.")
+    task.wait(3.5)
+    Chat("Yeah you wanna talk to me now?")
+    task.wait(3)
+    
+
+    Chat("/e point")
+    Chat("Oh thats the way your gonna be?")
+    Character.Humanoid.WalkSpeed = 0
+    
+    task.spawn(function()
+        task.wait(1)
+        Character.Humanoid.WalkSpeed = 16
+    end)    
+    
+    task.wait(3.5)
+    
+end
+
+Chat("Hey guys, I guess thats it.")
+task.wait(1.5)
+
+
+
+local GH  = Instance.new("Part") -- gun handle
+GH.Parent = Character
+GH.Size = Vector3.new(1,1,1)
+GH.Transparency = 1
+GH.CanCollide = true
+GH.Massless = true
+GH.Name = "GunPart"
+
+local FKLA  = Instance.new("Part") -- gun handle
+FKLA.Parent = Character
+FKLA.Size = Vector3.new(1,2,1)
+FKLA.Transparency = 1
+FKLA.CanCollide = true
+FKLA.Massless = true
+
+local FKRA  = Instance.new("Part") -- gun handle
+FKRA.Parent = Character
+FKRA.Size = Vector3.new(1,2,1)
+FKRA.Transparency = 1
+FKRA.CanCollide = true
+FKRA.Massless = true
+
+local GHW = Instance.new("Weld")
+GHW.Parent = GH
+GHW.Part0 = Character.Torso
+GHW.Part1 = GH
+GHW.C0 = CFrame.new(0,-1,-0.9)
+GHW.C1 = CFrame.Angles(math.rad(0),math.rad(90),math.rad(0))
+
+local FKLAW = Instance.new("Weld")
+FKLAW.Parent = FKLA
+FKLAW.Part0 = Character.Torso
+FKLAW.Part1 = FKLA
+FKLAW.C0 = CFrame.new(-0.75,-1.25,-.65)
+FKLAW.C1 = CFrame.Angles(math.rad(-30),math.rad(20),math.rad(-40))
+
+local FKRAW = Instance.new("Weld")
+FKRAW.Parent = FKRA
+FKRAW.Part0 = Character.Torso
+FKRAW.Part1 = FKRA
+FKRAW.C0 = CFrame.new(0.9,0,-.5)
+FKRAW.C1 = CFrame.Angles(math.rad(0),math.rad(30),math.rad(120))
+
+local Gun = Character["Stylized Musket"].Handle
+Gun.AccessoryWeld:Destroy()
+
+Character.Torso["Left Shoulder"]:Destroy()
+Netless(Character["Left Arm"])
+CFAtt(Character["Left Arm"],FKLA,CFrame.new(0,0,0))
+
+Character.Torso["Right Shoulder"]:Destroy()
+Netless(Character["Right Arm"])
+CFAtt(Character["Right Arm"],FKRA,CFrame.new(0,0,0))
+
+Netless(Gun)
+CFAtt(Gun,GH,CFrame.new(0,0,0)*CFrame.Angles(math.rad(0),math.rad(0),math.rad(30)))
+
+
+
+task.wait(0.75)
+
+
+game.Players:Chat("-gh 3381448821")
+
+task.wait(0.25)
+
+GHW:Destroy()
+
+GH.Velocity = Vector3.new(math.random(-10,10),15,math.random(-10,10))
+GH.RotVelocity = Vector3.new(math.random(-10,10),15,math.random(-10,10))
+
+for _,v in pairs(bloodstorage) do v:Disconnect() end
+
+for _,v in pairs(Character:GetChildren()) do
+    if v.Name == "tempbloodstoragepart" then
+        v:Destroy()
+    end
+end    
+
+
+for _,v in pairs(Character:GetChildren()) do
+    if v.Name == "BloodSplashAccessory" then
+        CFAtt(v.Handle, CreateExplosionPart(), CFrame.new(0,0,0))
+    end
+end    
+
+
+Character.Humanoid.PlatformStand = true
+
+for _,v in pairs(Character:GetDescendants()) do
+    if v:IsA("Part") or v:IsA("BasePart") then
+        v.Massless = true 
+    end    
+end    
+
+task.spawn(function()
+    bbpart.Position = Character.HumanoidRootPart.Position - Vector3.new(0,10,0)
+    boombox.RemoteEvent:FireServer(9089977337)
+    task.wait(1.3)
+    --boombox:Destroy()
+    boombox.RemoteEvent:FireServer(1845756489) 
+end)    
+    
+
+GHW:Destroy()
+
+GH.Velocity = Vector3.new(math.random(-10,10),15,math.random(-10,10))
+GH.RotVelocity = Vector3.new(math.random(-10,10),15,math.random(-10,10))
+
+Character.Torso["Left Hip"]:Destroy()
+Netless(Character["Left Leg"])
+CFAtt(Character["Left Leg"],CreateBallSocket(Character["Left Leg"], Vector3.new(0,1,0), Character.Torso, Vector3.new(-0.5, -1, -0)),CFrame.new())
+
+Character.Torso["Right Hip"]:Destroy()
+Netless(Character["Right Leg"])
+CFAtt(Character["Right Leg"],CreateBallSocket(Character["Right Leg"], Vector3.new(0,1,0), Character.Torso, Vector3.new(0.5, -1, -0)),CFrame.new())
+
+FKLAW:Destroy()
+CFAtt(FKLA,CreateBallSocket(FKLA, Vector3.new(0,1,0), Character.Torso, Vector3.new(-1.5, 1, -0)),CFrame.new(0,0,0))
+
+FKRAW:Destroy()
+CFAtt(FKRA,CreateBallSocket(FKRA, Vector3.new(0,1,0), Character.Torso, Vector3.new(1.5, 1, -0)),CFrame.new(0,0,0))
+
+for _,v in pairs(Character:GetChildren()) do
+    if v.Name ~= "HumanoidRootPart" and v.Name ~= "GunPart" and v.Name ~= "Part" and v.Name ~= "Torso" and v.Name ~= "Head" and not string.find(v.Name, "FAKE") then
+        game:GetService("RunService").Stepped:Connect(function()
+            pcall(function()
+                v.CanCollide = false
+            end)
+        end)   
+    end
+end    
+
+task.wait(1.5)
+
+for _,v in pairs(Character:GetChildren()) do
+    if v:IsA("BasePart") then
+        v.Anchored = true
+    end    
+end    
+
