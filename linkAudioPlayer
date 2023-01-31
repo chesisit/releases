@@ -1,0 +1,24 @@
+-- script made by ches. with big help from Iss0#2367
+
+-- add your song link
+local songLink = "https://cdn.discordapp.com/attachments/1061951850485657642/1068641768775614474/Mannrobics.mp3"
+
+local function loadSong(url) -- Function made by Iss0#2367
+    local extension = string.split(url, ".")
+    
+    writefile("gensound." ..extension[#extension], syn.request({Url=url, Method="GET"}).Body)
+
+    return getsynasset("gensound." ..extension[#extension])
+end
+
+local function playSong(link,vol,pitch,loop)
+    local sound = Instance.new("Sound")
+    sound.Parent = workspace[game:GetService("Players").LocalPlayer.Name].Head
+    sound.SoundId = loadSong(link)
+    sound.Looped = loop
+    sound.Volume = 2 
+    sound:Play()
+    return sound
+end
+
+playSong(songLink,1,1,true)
